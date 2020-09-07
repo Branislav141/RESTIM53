@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Common.CommunicationBus;
+using Common.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,21 @@ namespace UI
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            StringToJSONConverter converter = new StringToJSONConverter();
+            Zahtev z = converter.Convert(txt_box_request.Text);
+            if(z == null)
+            {
+                MessageBox.Show("Molimo unesite ispravan zahtev.");
+                return;
+            }
+            else
+            {
+
+            }
         }
     }
 }
