@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommunicationBus\CommunicationBusService.cs" />
     <Compile Include="CommunicationBus\StringToJSONConverter.cs" />
+    <Compile Include="CommunicationBus\XMLToSQL.cs" />
     <Compile Include="Model\Response.cs" />
     <Compile Include="Model\Resurs.cs" />
     <Compile Include="Model\Tip.cs" />
