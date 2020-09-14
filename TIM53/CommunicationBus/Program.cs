@@ -1,6 +1,5 @@
 ﻿using Common.CommunicationBus;
 using Common.Model;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using CommunicationBus;
+using Newtonsoft.Json;
 
 namespace CommunicationBus
 {
@@ -15,11 +15,11 @@ namespace CommunicationBus
     {
         static void Main(string[] args)
         {
-            Zahtev zahtev = new Zahtev();
             StringToJSONConverter stringToJSON = new StringToJSONConverter();
             char exit = 'a';
             string URL = "";
             bool urlValid = false;
+            string zahtev = "";
             while (exit.ToString().ToUpper() != "X")
             {
                 while (!urlValid)
@@ -30,15 +30,12 @@ namespace CommunicationBus
                     zahtev = stringToJSON.Convert(URL);
                     urlValid = true;
                 }
-                zahtev = stringToJSON.Convert(URL);
-                Console.WriteLine(zahtev.ToString());
                 //JSON
-                string jsonZahtev = JsonConvert.SerializeObject(zahtev, Formatting.Indented);
+                string jsonZahtev = stringToJSON.Convert(URL);
                 Console.WriteLine(jsonZahtev);
 
                 //pozvati bus
                 
-
                 XNode xmlNode = JsonConvert.DeserializeXNode(jsonZahtev, "Zahtev");
 
                 CommunicationBusService CBService = new CommunicationBusService(xmlNode);

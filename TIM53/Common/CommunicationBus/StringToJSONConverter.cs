@@ -1,4 +1,5 @@
 ﻿using Common.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Common.CommunicationBus
         {
 
         }
-        public Zahtev Convert(string stringRequest)
+        public string Convert(string stringRequest)
         {
             Zahtev zahtev = new Zahtev();
             string[] delovi = stringRequest.Split('/');
@@ -66,7 +67,7 @@ namespace Common.CommunicationBus
                 return null;
             }
 
-            return zahtev;
+            return JsonConvert.SerializeObject(zahtev, Formatting.Indented);
         }
     }
 }
