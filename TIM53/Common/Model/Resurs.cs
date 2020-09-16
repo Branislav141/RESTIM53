@@ -20,5 +20,9 @@ namespace Model
             Opis = opis;
             TipResursa = tip_resursa;
         }
+        public Resurs()
+        {
+
+        }
     }
 }

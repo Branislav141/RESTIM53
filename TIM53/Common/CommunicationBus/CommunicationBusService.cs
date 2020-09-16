@@ -18,17 +18,16 @@ namespace Common.CommunicationBus
 
         public CommunicationBusService(XNode node)
         {
+
             Node = node;
-            Run();
         }
-        public void Run(XNode node = null)
+        public string Run(XNode node = null)
         {
             if(node != null)
             {
                 Node = node;
             }
-            xMLToSQL.ConvertAndRun(Node);
-            
+            return xMLToSQL.ConvertAndRun(Node);
         }
     }
 }

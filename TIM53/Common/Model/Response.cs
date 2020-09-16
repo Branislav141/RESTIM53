@@ -12,6 +12,7 @@ namespace Common.Model
         BAD_FORMAT = 5000,
         SUCCESS = 2000
     }
+
     public class Odgovor
     {
         public string Status { get; set; }
@@ -23,6 +24,11 @@ namespace Common.Model
             Status = code.ToString();
             StatusCode = code;
             payload = payload;
+        }
+
+        public Odgovor()
+        {
+
         }
     }
 }

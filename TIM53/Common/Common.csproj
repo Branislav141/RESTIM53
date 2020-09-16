@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -58,6 +59,11 @@
     <Compile Include="CommunicationBus\StringToJSONConverter.cs" />
     <Compile Include="CommunicationBus\XMLToSQL.cs" />
     <Compile Include="DataBaseContext.cs" />
+    <Compile Include="Migrations\202009111252488_Prva Migracija.cs" />
+    <Compile Include="Migrations\202009111252488_Prva Migracija.designer.cs">
+      <DependentUpon>202009111252488_Prva Migracija.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Response.cs" />
     <Compile Include="Model\Resurs.cs" />
     <Compile Include="Model\Tip.cs" />
@@ -69,6 +75,11 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202009111252488_Prva Migracija.resx">
+      <DependentUpon>202009111252488_Prva Migracija.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

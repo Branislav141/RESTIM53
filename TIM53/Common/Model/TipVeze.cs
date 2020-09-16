@@ -15,5 +15,10 @@ namespace Model
 			Id = id;
 			Naziv = naziv;
 		}
+        public TipVeze()
+        {
+
+        }
+
     }
 }

@@ -1,9 +1,15 @@
-﻿using System;
+﻿using Common.Migrations;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
+using Formatting = Newtonsoft.Json.Formatting;
 
 namespace Common.CommunicationBus
 {
@@ -19,11 +25,19 @@ namespace Common.CommunicationBus
         {
             SQL = sQL;
         }
-
-        public void ConvertAndRun(XNode node)
+        //GET/Resurs/1
+        //GET/Tips/1
+        //GET/TipVezes/1
+        //GET/Vezas/1
+        //GET/Resurs/1/Naziv='resurs'/id;Naziv
+        //GET/Resurs/1//id;Naziv
+        //GET/Resurs/1/Naziv='resurs'
+        public string ConvertAndRun(XNode node)
         {
             XElement element = node.Document.Element("Zahtev");
             string metod = element.Element("Verb").Value;
+            string verb = element.Element("Noun").Value;
+            string[] deo = verb.Split('/');
             string SQL = "";
             if (metod.ToUpper() == "GET")
             {
@@ -47,6 +61,41 @@ namespace Common.CommunicationBus
             }
             Console.WriteLine(SQL);
             //RUN SQL
+            string result = ExecuteSQLreturnJSON(SQL);
+
+            ////result = dbContext.ResursTabela.SqlQuery(SQL).ToList();
+            //XDocument doc = (XDocument)JsonConvert.DeserializeXmlNode("{\"Row\":" + result + "}", "root");
+
+            //XElement xmlEl = xmlNode.Document.Root.Element("Zahtev");
+            //Console.WriteLine(xmlEl.ToString());
+            var xml = XDocument.Load(JsonReaderWriterFactory.CreateJsonReader(
+                Encoding.ASCII.GetBytes(result ), new XmlDictionaryReaderQuotas()));//JSON TO XML
+
+            return xml.ToString();
+        }
+
+        private string ExecuteSQLreturnJSON(string sQL)
+        {
+            DataBaseContext dbContext = new DataBaseContext();
+            Console.WriteLine(dbContext.Database.ExecuteSqlCommand(sQL));
+            object result = null;
+            if (sQL.Contains("Resurs"))
+            {
+                 result = dbContext.ResursTabela.SqlQuery(sQL).ToList();
+            }
+            else if (sQL.Contains("Tips"))
+            {
+                result = dbContext.TipTabela.SqlQuery(sQL).ToList();
+            }
+            else if (sQL.Contains("TipVezes"))
+            {
+                result = dbContext.TipVezeTabela.SqlQuery(sQL).ToList();
+            }
+            else if (sQL.Contains("Vezas"))
+            {
+                result = dbContext.VezaTabela.SqlQuery(sQL).ToList();
+            }
+            return JsonConvert.SerializeObject(result, Formatting.Indented);
         }
         private string GetSQL(XElement element)
         {
@@ -66,11 +115,21 @@ namespace Common.CommunicationBus
             }
             SQLZahtev += " FROM " + delovi[0];
 
-            if (delovi.Length == 2) { SQLZahtev += " WHERE Id=" + delovi[1]; }
+            if (delovi.Length >= 2 && !String.IsNullOrEmpty(delovi[1])) 
+            {
+                SQLZahtev += " WHERE Id=" + delovi[1];
+            }
 
             if (!String.IsNullOrEmpty(Querry))
             {
-                SQLZahtev += " AND " + Querry;
+                if (delovi.Length >= 2 && !String.IsNullOrEmpty(delovi[1]))
+                {
+                    SQLZahtev += " AND ";
+                }
+                else {
+                    SQLZahtev += " WHERE ";
+                }
+                SQLZahtev += Querry;
             }
             SQLZahtev += ";"; //FOR XML RAW
             return SQLZahtev;

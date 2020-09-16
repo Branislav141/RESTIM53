@@ -20,26 +20,25 @@ namespace CommunicationBus
             string URL = "";
             bool urlValid = false;
             string zahtev = "";
+
             while (exit.ToString().ToUpper() != "X")
             {
                 while (!urlValid)
                 {
                     Console.WriteLine("Unesite URL: ");
                     URL = Console.ReadLine();
-                    //Validation URL
                     zahtev = stringToJSON.Convert(URL);
                     urlValid = true;
                 }
-                //JSON
                 string jsonZahtev = stringToJSON.Convert(URL);
                 Console.WriteLine(jsonZahtev);
 
-                //pozvati bus
                 
                 XNode xmlNode = JsonConvert.DeserializeXNode(jsonZahtev, "Zahtev");
 
                 CommunicationBusService CBService = new CommunicationBusService(xmlNode);
-                //xmlNode.Document.Element("Verb");
+                Console.WriteLine(CBService.Run(xmlNode));
+
                 XElement element = xmlNode.Document.Element("Zahtev");
                 Console.WriteLine(element.ToString());
 
